@@ -16,7 +16,7 @@ S3method(print, geeglm)
 S3method(residuals, geeglm)
 S3method(summary, geeglm)
 S3method(print, summary.geeglm)
-
+S3method(vcov, geeglm)
 
 # maintained by Jun
 export(geese, geese.fit, ordgee, geese.control)

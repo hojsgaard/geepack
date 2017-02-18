@@ -68,20 +68,24 @@ eprint <- function(x){
 #' Prentice, R.L. and Zhao, L.P. (1991). Estimating equations for parameters in
 #' means and covariances of multivariate discrete and continuous responses.
 #' Biometrics, *47* 825-839.
+#' 
 #' @keywords models
 #' @examples
 #' 
 #' data(dietox)
 #' dietox$Cu     <- as.factor(dietox$Cu)
-#' mf <- formula(Weight~Cu*(Time+I(Time^2)+I(Time^3)))
-#' gee1 <- geeglm(mf, data=dietox, id=Pig, family=poisson("identity"),corstr="ar1")
+#' mf <- formula(Weight ~ Cu * (Time + I(Time^2) + I(Time^3)))
+#' gee1 <- geeglm(mf, data=dietox, id=Pig, family=poisson("identity"), corstr="ar1")
 #' gee1
+#' coef(gee1)
+#' vcov(gee1)
 #' summary(gee1)
+#' coef(summary(gee1))
 #' 
-#' mf2 <- formula(Weight~Cu*Time+I(Time^2)+I(Time^3))
-#' gee2 <- geeglm(mf2, data=dietox, id=Pig, family=poisson("identity"),corstr="ar1")
+#' 
+#' mf2 <- formula(Weight ~ Cu * Time + I(Time^2) + I(Time^3))
+#' gee2 <- geeglm(mf2, data=dietox, id=Pig, family=poisson("identity"), corstr="ar1")
 #' anova(gee2)
-#' 
 #' 
 #' @export geeglm
 geeglm<- function (formula, family = gaussian, data = parent.frame(), 
@@ -92,179 +96,174 @@ geeglm<- function (formula, family = gaussian, data = parent.frame(),
                    scale.value = 1, std.err = "san.se", ...) 
 {
 
+    STDERRS <- c("san.se", "jack", "j1s", "fij")
+    stderrv <- pmatch(std.err, STDERRS, -1)
+    std.err <- STDERRS[stderrv]
+    jackB <- j1sB <- fijB <- FALSE
 
-
-  STDERRS <- c("san.se", "jack", "j1s", "fij")
-  stderrv <- pmatch(std.err, STDERRS, -1)
-  std.err <- STDERRS[stderrv]
-  jackB <- j1sB <- fijB <- FALSE
-  if (std.err == "jack") 
-    jackB <- TRUE
-  if (std.err == "j1s") 
-    j1sB <- TRUE
-  if (std.err == "fij") 
-    fijB <- TRUE
-  control$jack <- as.integer(jackB)
-  control$j1s <- as.integer(j1sB)
-  control$fij <- as.integer(fijB)
-  CORSTRS <- c("independence", "exchangeable", "ar1", "unstructured", 
-               "userdefined","fixed")
-  if (corstr=="fixed" && is.null(zcor)){
-    stop("When corstr is 'fixed' then 'zcor' must be given\n")
-  }
-  eprint("SHDgeese.fit - corstr")
-  corstrv <- pmatch(corstr, CORSTRS, -1)
-  corstr <- CORSTRS[corstrv]
-  eprint("geeglm is called")
-
-
-  call <- match.call(expand.dots = TRUE)
-  glmcall <- call
-  glmcall$id <- glmcall$jack <- glmcall$control <- glmcall$corstr <-
-    glmcall$waves <- glmcall$zcor <- glmcall$std.err <-
-      glmcall$scale.fix <- glmcall$scale.value <- NULL
-  glmcall[[1]] <- as.name("glm")
-  glmFit <- eval(glmcall, parent.frame())
-  mf <- call
-  mf[[1]] <- as.name("model.frame")
-
-  modelmat <- model.matrix(glmFit)
-  qqrr <- qr(modelmat)
-  if (qqrr$rank < ncol(modelmat)){
-    print(head(modelmat))
-    stop("Model matrix is rank deficient; geeglm can not proceed\n")
-  }
-
-
-
-
-
+    if (std.err == "jack")  jackB <- TRUE
+    if (std.err == "j1s")   j1sB  <- TRUE
+    if (std.err == "fij")   fijB  <- TRUE
     
-  
-
-  
-  mftmp <- mf
-  mftmp$family <- mftmp$corstr <- mftmp$control <- mftmp$zcor <- mftmp$std.err <- NULL
-
-  mftmp$scale.fix <- NULL
-  mf <- eval(mftmp, parent.frame())
-
-  id <- model.extract(mf, id)
-
-  if (is.null(id)) 
-    stop("id variable not found.")
-  waves <- model.extract(mf, waves)
-  if (!is.null(waves)) 
-    waves <- as.factor(waves)
-  mt <- attr(mf, "terms")
-  Y <- model.response(mf, "numeric")
-  X <- if (!is.empty.model(mt)) 
-    model.matrix(mt, mf, contrasts)
-  else matrix(, NROW(Y), 0)
-
-
-  ## Check that factors in model do not have unused levels in data 
-  ## (otherwise R crashes).
-  vars <- all.vars(formula)
-  stopIt <- FALSE
-  for(ii in seq_along(vars)){
-    vv <- vars[ii]
-    if(!is.na(match(vv,names(mf))) && is.factor(mf[,vv])){
-      if (length(unique(mf[,vv])) != length(levels(mf[,vv]))){
-        cat("Factors not allowed to have unused levels...\n")
-        cat(" Levels of factor",vv,":", paste(levels(mf[,vv]),sep=' '),"\n")  
-        cat(" Used levels of factor",vv,":", paste(unique(mf[,vv]),sep=' '),"\n")
-        stopIt <- TRUE
-      }
+    control$jack <- as.integer(jackB)
+    control$j1s  <- as.integer(j1sB)
+    control$fij  <- as.integer(fijB)
+    CORSTRS <- c("independence", "exchangeable", "ar1", "unstructured", 
+                 "userdefined","fixed")
+    if (corstr=="fixed" && is.null(zcor)){
+        stop("When corstr is 'fixed' then 'zcor' must be given\n")
     }
-  }
-  if (stopIt)
-    stop("Can not continue...\n")
-  
-
-
-  
-  N <- NROW(Y)
-  yy <- Y
-  xx <- X
-  soffset <- rep(0, N)
-  mnames <- c("", "formula", "data", "offset", "weights", "subset", 
-              "na.action")
-  cnames <- names(call)
-  cnames <- cnames[match(mnames, cnames, 0)]
-  mcall <- call[cnames]
-  mcall$drop.unused.levels <- TRUE
-  mcall[[1]] <- as.name("model.frame")
-  mcall$formula <- formula
-  sformula <- ~1
-  mcall$formula[3] <- switch(match(length(sformula), c(0, 2, 
-                                                       3)), 1, sformula[2], sformula[3])
-  m <- eval(mcall, parent.frame())
-  terms <- attr(m, "terms")
-  zsca <- model.matrix(terms, m, contrasts)
-  colnames(zsca) <- c("(Intercept)")
-  w <- model.weights(mf)
-  if (is.null(w)) 
-    w <- rep(1, N)
-  offset <- model.offset(mf)
-  if (is.null(offset)) 
-    offset <- rep(0, N)
-  if (glmFit$family$family == "binomial") {
-    if (is.matrix(yy) && ncol(yy) == 2) {
-      w <- apply(yy, 1, sum)
-      yy <- yy[, 1]/w
+    eprint("SHDgeese.fit - corstr")
+    corstrv <- pmatch(corstr, CORSTRS, -1)
+    corstr <- CORSTRS[corstrv]
+    eprint("geeglm is called")
+    
+    call <- match.call(expand.dots = TRUE)
+    glmcall <- call
+    glmcall$id <- glmcall$jack <- glmcall$control <- glmcall$corstr <-
+        glmcall$waves <- glmcall$zcor <- glmcall$std.err <-
+            glmcall$scale.fix <- glmcall$scale.value <- NULL
+    glmcall[[1]] <- as.name("glm")
+    glmFit <- eval(glmcall, parent.frame())
+    mf <- call
+    mf[[1]] <- as.name("model.frame")
+    
+    modelmat <- model.matrix(glmFit)
+    qqrr <- qr(modelmat)
+    if (qqrr$rank < ncol(modelmat)){
+        print(head(modelmat))
+        stop("Model matrix is rank deficient; geeglm can not proceed\n")
     }
-  }
-  family <- glmFit$family
-  nacoef <- as.numeric(which(is.na(glmFit$coef)))
-  xx <- as.data.frame(xx)
-  xx[, nacoef] <- NULL
-  xx <- as.matrix(xx)
-
-  if (is.null(start)) 
-    start <- glmFit$coef
-
-  ans <- geese.fit(xx, yy, id, offset, soffset, w, waves = waves, 
-                   zsca, zcor = zcor, corp = NULL, control = control, b = start, 
-                   alpha = NULL, gm = NULL, family, mean.link = NULL, variance = NULL, 
-                   cor.link = "identity", sca.link = "identity", link.same = TRUE, 
-                   scale.fix = scale.fix, scale.value = scale.value, corstr, 
-                   ...)
-  ans <- c(ans, list(call = call, formula = formula))
-  class(ans) <- "geese"
-  ans$X <- xx
-  ans$id <- id
-  ans$weights <- w
-  value <- glmFit
-  toDelete <- c("R", "deviance", "aic", "null.deviance", "iter", 
-                "df.null", "converged", "boundary")
-  value[match(toDelete, names(value))] <- NULL
-  value$method <- "geese.fit"
-  value$geese <- ans
-  value$weights <- ans$weights
-  value$coefficients <- ans$beta
-  value$offset <- offset
-  if (is.null(value$offset)) 
-    value$linear.predictors <- ans$X %*% ans$beta
-  else value$linear.predictors <- value$offset + ans$X %*% 
-    ans$beta
-  value$fitted.values <- family(value)$linkinv(value$linear.predictors)
-  value$modelInfo <- ans$model
-  value$id <- ans$id
-  value$call <- ans$call
-  value$corstr <- ans$model$corstr
-  value$cor.link <- ans$model$cor.link
-  value$control <- ans$control
-  value$std.err <- std.err
-  class(value) <- c("geeglm", "gee", "glm", "lm")
-  return(value)
+    
+    mftmp <- mf
+    mftmp$family <- mftmp$corstr <- mftmp$control <- mftmp$zcor <- mftmp$std.err <- NULL
+    
+    mftmp$scale.fix <- NULL
+    mf <- eval(mftmp, parent.frame())
+    
+    id <- model.extract(mf, id)
+    if (is.null(id)) stop("id variable not found.")
+    
+    waves <- model.extract(mf, waves)
+    if (!is.null(waves))
+        waves <- as.factor(waves)
+    
+    mt <- attr(mf, "terms")
+    Y <- model.response(mf, "numeric")
+    X <- if (!is.empty.model(mt)) 
+             model.matrix(mt, mf, contrasts)
+         else matrix(, NROW(Y), 0)
+    
+    ## Check that factors in model do not have unused levels in data 
+    ## (otherwise R crashes).
+    vars <- all.vars(formula)
+    stopIt <- FALSE
+    for(ii in seq_along(vars)){
+        vv <- vars[ii]
+        if(!is.na(match(vv,names(mf))) && is.factor(mf[,vv])){
+            if (length(unique(mf[,vv])) != length(levels(mf[,vv]))){
+                cat("Factors not allowed to have unused levels...\n")
+                cat(" Levels of factor",vv,":", paste(levels(mf[,vv]),sep=' '),"\n")  
+                cat(" Used levels of factor",vv,":", paste(unique(mf[,vv]),sep=' '),"\n")
+                stopIt <- TRUE
+            }
+        }
+    }
+    if (stopIt)
+        stop("Can not continue...\n")
+    
+    N <- NROW(Y)
+    yy <- Y
+    xx <- X
+    soffset <- rep(0, N)
+    mnames <- c("", "formula", "data", "offset", "weights", "subset", 
+                "na.action")
+    cnames <- names(call)
+    cnames <- cnames[match(mnames, cnames, 0)]
+    mcall <- call[cnames]
+    mcall$drop.unused.levels <- TRUE
+    mcall[[1]] <- as.name("model.frame")
+    mcall$formula <- formula
+    sformula <- ~1
+    mcall$formula[3] <- switch(match(length(sformula), c(0, 2, 
+                                                         3)), 1, sformula[2], sformula[3])
+    m <- eval(mcall, parent.frame())
+    terms <- attr(m, "terms")
+    zsca <- model.matrix(terms, m, contrasts)
+    colnames(zsca) <- c("(Intercept)")
+    w <- model.weights(mf)
+    if (is.null(w)) 
+        w <- rep(1, N)
+    offset <- model.offset(mf)
+    if (is.null(offset)) 
+        offset <- rep(0, N)
+    if (glmFit$family$family == "binomial") {
+        if (is.matrix(yy) && ncol(yy) == 2) {
+            w <- apply(yy, 1, sum)
+            yy <- yy[, 1]/w
+        }
+    }
+    family <- glmFit$family
+    nacoef <- as.numeric(which(is.na(glmFit$coef)))
+    xx <- as.data.frame(xx)
+    xx[, nacoef] <- NULL
+    xx <- as.matrix(xx)
+    
+    if (is.null(start)) 
+        start <- glmFit$coef
+    
+    ans <- geese.fit(xx, yy, id, offset, soffset, w, waves = waves, 
+                     zsca, zcor = zcor, corp = NULL, control = control, b = start, 
+                     alpha = NULL, gm = NULL, family, mean.link = NULL, variance = NULL, 
+                     cor.link = "identity", sca.link = "identity", link.same = TRUE, 
+                     scale.fix = scale.fix, scale.value = scale.value, corstr, 
+                     ...)
+    ans <- c(ans, list(call = call, formula = formula))
+    class(ans) <- "geese"
+    ans$X <- xx
+    ans$id <- id
+    ans$weights <- w
+    value <- glmFit
+    toDelete <- c("R", "deviance", "aic", "null.deviance", "iter", 
+                  "df.null", "converged", "boundary")
+    value[match(toDelete, names(value))] <- NULL
+    value$method <- "geese.fit"
+    value$geese <- ans
+    value$weights <- ans$weights
+    value$coefficients <- ans$beta
+    value$offset <- offset
+    if (is.null(value$offset)) 
+        value$linear.predictors <- ans$X %*% ans$beta
+    else value$linear.predictors <- value$offset + ans$X %*% 
+             ans$beta
+    value$fitted.values <- family(value)$linkinv(value$linear.predictors)
+    value$modelInfo <- ans$model
+    value$id <- ans$id
+    value$call <- ans$call
+    value$corstr <- ans$model$corstr
+    value$cor.link <- ans$model$cor.link
+    value$control <- ans$control
+    value$std.err <- std.err
+    class(value) <- c("geeglm", "gee", "glm", "lm")
+    return(value)
 }
-    
 
 
 
 
 
+
+vcov.geeglm <- function(object, ...){
+    out <- switch(object$std.err,
+                  'jack'={object$geese$vbeta.ajs},
+                  'j1s'={object$geese$vbeta.j1s},
+                  'fij'={object$geese$vbeta.fij},
+                  object$geese$vbeta
+                  )
+    pn <- names(coef(gee1))
+    dimnames(out) <- list(pn, pn)
+    out
+}
 
 
 
