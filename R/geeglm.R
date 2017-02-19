@@ -260,7 +260,7 @@ vcov.geeglm <- function(object, ...){
                   'fij'={object$geese$vbeta.fij},
                   object$geese$vbeta
                   )
-    pn <- names(coef(gee1))
+    pn <- names(coef(object))
     dimnames(out) <- list(pn, pn)
     out
 }
