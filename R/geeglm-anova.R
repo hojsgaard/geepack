@@ -73,7 +73,7 @@ anovageePrim2 <- function(m1, m2,...){
       b0 <- beta[zeroidx]
       ##bv <<- list(b0=b0, V0=V0)
       ##X2 <- t(b0) %*% solve(V0, b0)
-      X2 <- as.numeric( t(b0) %*% MASS::ginv(V0) %*% b0)
+      X2 <- as.numeric( t(b0) %*% ginv(V0) %*% b0)
       ev <- eigen(V0, only.values=TRUE)$values
       df.real <- sum(ev > 1e-12)
             

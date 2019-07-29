@@ -8,6 +8,7 @@ importFrom("stats", "binomial", "coef", "fitted", "formula",
            "pchisq", "printCoefmat", "quasi", "residuals",
            "summary.glm", "var")
 importFrom("utils", "head")
+importFrom("MASS", "ginv")
 
 # maintained by Soren
 export(geeglm, fixed2Zcor, anovageePrim2)
