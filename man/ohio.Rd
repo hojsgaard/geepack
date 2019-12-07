@@ -34,4 +34,3 @@ Fitzmaurice, G.M. and Laird, N.M. (1993) A likelihood-based
     \bold{80}: 141--151.
 }
 \keyword{datasets}
-

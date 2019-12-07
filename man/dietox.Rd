@@ -4,14 +4,21 @@
 \name{dietox}
 \alias{dietox}
 \title{Growth curves of pigs in a 3x3 factorial experiment}
-\format{This data frame contains the following columns: \describe{
-    \item{Weight}{a numeric vector} \item{Feed}{a numeric vector}
-    \item{Time}{a numeric vector} \item{Pig}{a numeric vector} \item{Evit}{a
-    numeric vector} \item{Cu}{a numeric vector} \item{Litter}{a numeric
-    vector} }}
+\format{This data frame contains the following columns:
+
+\describe{
+\item{Weight}{Weight}
+\item{Feed}{Cumulated feed intake}
+\item{Time}{Time (in weeks) in the experiment}
+\item{Pig}{Id of each pig}
+\item{Evit}{Vitamin E dose}
+\item{Cu}{Copper dose}
+\item{Start}{Start weight in experiment, i.e. weight at week 1.}
+\item{Litter}{Id of litter of each pig}
+}}
 \source{
-Lauridsen, C., Højsgaard, S.,Sørensen, M.T. C. (1999) Influence
-    of Dietary Rapeseed Oli, Vitamin E, and Copper on Performance and
+Lauridsen, C., Højsgaard, S.,Sørensen, M.T. C. (1999) Influence of
+    Dietary Rapeseed Oli, Vitamin E, and Copper on Performance and
     Antioxidant and Oxidative Status of Pigs. J. Anim. Sci.77:906-916
 }
 \usage{
@@ -20,19 +27,20 @@ dietox
 \description{
 The \code{dietox} data frame has 861 rows and 7 columns.
 }
+\details{
+Data contains weight of slaughter pigs measured weekly for 12
+    weeks. Data also contains the startweight (i.e. the weight at week
+    1). The treatments are 3 different levels of Evit = vitamin E (dose: 0,
+    100, 200 mg dl-alpha-tocopheryl acetat /kg feed) in combination with 3
+    different levels of Cu=copper (dose: 0, 35, 175 mg/kg feed) in the feed.
+    The cumulated feed intake is also recorded. The pigs are littermates.
+}
 \examples{
 
 data(dietox)
-dietox$Cu     <- as.factor(dietox$Cu)
-gee01 <- geeglm (Weight ~ Time + Cu + Cu * Time, id =Pig, data = dietox,
-         family=gaussian,corstr="ex")
-
-mf <- formula(Weight~Cu*(Time+I(Time^2)+I(Time^3)))
-gee1 <- geeglm(mf, data=dietox, id=Pig, family=poisson("identity"),corstr="ar1")
-summary(gee1)
-anova(gee1)
+str(dietox) ;
+plot(dietox)
 
 
 }
 \keyword{datasets}
-

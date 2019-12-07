@@ -46,4 +46,3 @@ Miller, M.E., David, C.S., and Landis, R.J. (1993) The analysis
     1033-1048.
 }
 \keyword{datasets}
-

@@ -4,12 +4,29 @@
 \alias{geeglm}
 \title{Fit Generalized Estimating Equations (GEE)}
 \usage{
-geeglm(formula, family = gaussian, data = parent.frame(), weights, subset,
-  na.action, start = NULL, etastart, mustart, offset,
-  control = geese.control(...), method = "glm.fit", x = FALSE, y = TRUE,
-  contrasts = NULL, id, waves = NULL, zcor = NULL,
-  corstr = "independence", scale.fix = FALSE, scale.value = 1,
-  std.err = "san.se", ...)
+geeglm(
+  formula,
+  family = gaussian,
+  data = parent.frame(),
+  weights,
+  subset,
+  na.action,
+  start = NULL,
+  etastart,
+  mustart,
+  offset,
+  control = geese.control(...),
+  method = "glm.fit",
+  contrasts = NULL,
+  id,
+  waves = NULL,
+  zcor = NULL,
+  corstr = "independence",
+  scale.fix = FALSE,
+  scale.value = 1,
+  std.err = "san.se",
+  ...
+)
 }
 \arguments{
 \item{formula}{See corresponding documentation to \code{glm}}
@@ -37,39 +54,39 @@ data.}
 
 \item{method}{See corresponding documentation to \code{glm}}
 
-\item{x}{See corresponding documentation to \code{glm}}
-
-\item{y}{See corresponding documentation to \code{glm}}
-
 \item{contrasts}{See corresponding documentation to \code{glm}}
 
-\item{id}{a vector which identifies the clusters.  The length of `id' should
-be the same as the number of observations.  Data are assumed to be sorted
-so that observations on a cluster are contiguous rows for all entities in
-the formula.}
+\item{id}{a vector which identifies the clusters.  The length of
+`id' should be the same as the number of observations.  Data
+are assumed to be sorted so that observations on each cluster
+appear as contiguous rows in data. If that is not the case,
+must use the 'waves' argument - or you will see strange
+results. Please consult the package vignette for details.}
 
-\item{waves}{Wariable specifying the ordering of repeated mesurements on the
-same unit.  Also used in connection with missing values. See examples
-below.}
+\item{waves}{Wariable specifying the ordering of repeated
+mesurements on the same unit.  Also used in connection with
+missing values. Please consult the package vignette for details.}
 
-\item{zcor}{Used for entering a user defined working correlation structure.}
+\item{zcor}{Used for entering a user defined working correlation
+structure.}
 
-\item{corstr}{a character string specifying the correlation structure. The
-following are permitted: '"independence"', '"exchangeable"', '"ar1"',
-'"unstructured"' and '"userdefined"'}
+\item{corstr}{a character string specifying the correlation
+structure. The following are permitted: '"independence"',
+'"exchangeable"', '"ar1"', '"unstructured"' and '"userdefined"'}
 
-\item{scale.fix}{a logical variable; if true, the scale parameter is fixed at
-the value of 'scale.value'.}
+\item{scale.fix}{a logical variable; if true, the scale parameter
+is fixed at the value of 'scale.value'.}
 
-\item{scale.value}{numeric variable giving the value to which the scale
-parameter should be fixed; used only if 'scale.fix == TRUE'.}
+\item{scale.value}{numeric variable giving the value to which the
+scale parameter should be fixed; used only if 'scale.fix =
+TRUE'.}
 
-\item{std.err}{Type of standard error to be calculated. Defualt 'san.se' is
-the usual robust estimate.  Other options are 'jack': if approximate
-jackknife variance estimate should be computed.  'j1s': if 1-step
-jackknife variance estimate should be computed.  'fij': logical
-indicating if fully iterated jackknife variance estimate should be
-computed.}
+\item{std.err}{Type of standard error to be calculated. Defualt
+'san.se' is the usual robust estimate.  Other options are
+'jack': if approximate jackknife variance estimate should be
+computed.  'j1s': if 1-step jackknife variance estimate should
+be computed.  'fij': logical indicating if fully iterated
+jackknife variance estimate should be computed.}
 
 \item{\dots}{further arguments passed to or from other methods.}
 }
@@ -97,6 +114,7 @@ See the documentation for the 'geese' function for additional
  Use "unstructured" correlation structure only with great
     care. (It may cause R to crash).
 }
+
 \examples{
 
 data(dietox)
@@ -115,19 +133,22 @@ gee2 <- geeglm(mf2, data=dietox, id=Pig, family=poisson("identity"), corstr="ar1
 anova(gee2)
 
 }
+\references{
+Halekoh, U.; Højsgaard, S. and Yan, J (2006)
+The R Package geepack for Generalized Estimating Equations.
+Journal of Statistical Software, 15, 2, 1-11"
+
+Liang, K.Y. and Zeger, S.L. (1986) Longitudinal data analysis using
+generalized linear models. Biometrika, *73* 13-22.
+
+Prentice, R.L. and Zhao, L.P. (1991). Estimating equations for
+parameters in means and covariances of multivariate discrete and
+continuous responses.  Biometrics, *47* 825-839.
+}
+\seealso{
+\code{\link{geese}}, \code{\link{glm}}, \code{\link{anova.geeglm}}
+}
 \author{
 Søren Højsgaard, , \email{sorenh@math.aau.dk}
 }
-\references{
-Liang, K.Y. and Zeger, S.L. (1986) Longitudinal data analysis
-    using generalized linear models. Biometrika, *73* 13-22.
-
-Prentice, R.L. and Zhao, L.P. (1991). Estimating equations for parameters in
-means and covariances of multivariate discrete and continuous responses.
-Biometrics, *47* 825-839.
-}
-\seealso{
-\code{\link{geese}}, \code{\link{glm}},\code{\link{anova.geeglm}}
-}
 \keyword{models}
-

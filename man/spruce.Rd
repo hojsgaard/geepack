@@ -42,4 +42,3 @@ summary(fit.89)
 
 }
 \keyword{datasets}
-

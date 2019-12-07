@@ -28,4 +28,3 @@ data(respiratory)
 
 }
 \keyword{datasets}
-

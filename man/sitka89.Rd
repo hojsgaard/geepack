@@ -20,4 +20,3 @@ data(sitka89)
 
 }
 \keyword{datasets}
-
