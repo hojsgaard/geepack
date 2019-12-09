@@ -59,9 +59,10 @@ data.}
 \item{id}{a vector which identifies the clusters.  The length of
 `id' should be the same as the number of observations.  Data
 are assumed to be sorted so that observations on each cluster
-appear as contiguous rows in data. If that is not the case,
-must use the 'waves' argument - or you will see strange
-results. Please consult the package vignette for details.}
+appear as contiguous rows in data. If data is not sorted this
+way, the function will not identify the clusters correctly. If
+data is not sorted this way, a warning will be issued. Please
+consult the package vignette for details.}
 
 \item{waves}{Wariable specifying the ordering of repeated
 mesurements on the same unit.  Also used in connection with
@@ -127,7 +128,6 @@ vcov(gee1)
 summary(gee1)
 coef(summary(gee1))
 
-
 mf2 <- formula(Weight ~ Cu * Time + I(Time^2) + I(Time^3))
 gee2 <- geeglm(mf2, data=dietox, id=Pig, family=poisson("identity"), corstr="ar1")
 anova(gee2)
@@ -149,6 +149,6 @@ continuous responses.  Biometrics, *47* 825-839.
 \code{\link{geese}}, \code{\link{glm}}, \code{\link{anova.geeglm}}
 }
 \author{
-Søren Højsgaard, , \email{sorenh@math.aau.dk}
+Søren Højsgaard, \email{sorenh@math.aau.dk}
 }
 \keyword{models}

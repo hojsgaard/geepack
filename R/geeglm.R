@@ -36,9 +36,10 @@ eprint <- function(x){
 #' @param id a vector which identifies the clusters.  The length of
 #'     `id' should be the same as the number of observations.  Data
 #'     are assumed to be sorted so that observations on each cluster
-#'     appear as contiguous rows in data. If that is not the case,
-#'     must use the 'waves' argument - or you will see strange
-#'     results. Please consult the package vignette for details.
+#'     appear as contiguous rows in data. If data is not sorted this
+#'     way, the function will not identify the clusters correctly. If
+#'     data is not sorted this way, a warning will be issued. Please
+#'     consult the package vignette for details.
 #' 
 #' @param waves Wariable specifying the ordering of repeated
 #'     mesurements on the same unit.  Also used in connection with
@@ -70,7 +71,7 @@ eprint <- function(x){
 #' @section Warning : Use "unstructured" correlation structure only with great
 #'     care. (It may cause R to crash).
 #' 
-#' @author Søren Højsgaard, , \email{sorenh@@math.aau.dk}
+#' @author Søren Højsgaard, \email{sorenh@@math.aau.dk}
 #' 
 #' @seealso \code{\link{geese}}, \code{\link{glm}}, \code{\link{anova.geeglm}}
 #' 
@@ -100,7 +101,6 @@ eprint <- function(x){
 #' summary(gee1)
 #' coef(summary(gee1))
 #' 
-#' 
 #' mf2 <- formula(Weight ~ Cu * Time + I(Time^2) + I(Time^3))
 #' gee2 <- geeglm(mf2, data=dietox, id=Pig, family=poisson("identity"), corstr="ar1")
 #' anova(gee2)
@@ -128,15 +128,14 @@ geeglm<- function (formula, family = gaussian, data = parent.frame(),
     control$j1s  <- as.integer(j1sB)
     control$fij  <- as.integer(fijB)
     CORSTRS <- c("independence", "exchangeable", "ar1", "unstructured", 
-                 "userdefined","fixed")
+                 "userdefined", "fixed")
     if (corstr=="fixed" && is.null(zcor)){
         stop("When corstr is 'fixed' then 'zcor' must be given\n")
     }
-    eprint("SHDgeese.fit - corstr")
+
     corstrv <- pmatch(corstr, CORSTRS, -1)
     corstr <- CORSTRS[corstrv]
-    eprint("geeglm is called")
-    
+
     call <- match.call(expand.dots = TRUE)
     glmcall <- call
     glmcall$id <- glmcall$jack <- glmcall$control <- glmcall$corstr <-
@@ -159,11 +158,16 @@ geeglm<- function (formula, family = gaussian, data = parent.frame(),
     
     mftmp$scale.fix <- NULL
     mf <- eval(mftmp, parent.frame())
-    
+
+    ## Clustering variable
     id <- model.extract(mf, id)
     if (is.null(id)) stop("id variable not found.")
-    
+
+    if (is.unsorted(id))
+        warning("Data is assumed to be sorted by the 'id' variable; that seems not to be the case. \n", call.=FALSE)
+
     waves <- model.extract(mf, waves)
+    ##print(waves)    
     if (!is.null(waves))
         waves <- as.factor(waves)
     
@@ -179,11 +183,11 @@ geeglm<- function (formula, family = gaussian, data = parent.frame(),
     stopIt <- FALSE
     for(ii in seq_along(vars)){
         vv <- vars[ii]
-        if(!is.na(match(vv,names(mf))) && is.factor(mf[,vv])){
+        if(!is.na(match(vv, names(mf))) && is.factor(mf[,vv])){
             if (length(unique(mf[,vv])) != length(levels(mf[,vv]))){
                 cat("Factors not allowed to have unused levels...\n")
-                cat(" Levels of factor",vv,":", paste(levels(mf[,vv]),sep=' '),"\n")  
-                cat(" Used levels of factor",vv,":", paste(unique(mf[,vv]),sep=' '),"\n")
+                cat(" Levels of factor", vv,":", paste(levels(mf[, vv]), sep=' '),"\n")  
+                cat(" Used levels of factor", vv,":", paste(unique(mf[, vv]), sep=' '),"\n")
                 stopIt <- TRUE
             }
         }
@@ -210,18 +214,22 @@ geeglm<- function (formula, family = gaussian, data = parent.frame(),
     terms <- attr(m, "terms")
     zsca <- model.matrix(terms, m, contrasts)
     colnames(zsca) <- c("(Intercept)")
+
     w <- model.weights(mf)
     if (is.null(w)) 
         w <- rep(1, N)
+
     offset <- model.offset(mf)
     if (is.null(offset)) 
         offset <- rep(0, N)
+    
     if (glmFit$family$family == "binomial") {
         if (is.matrix(yy) && ncol(yy) == 2) {
             w <- apply(yy, 1, sum)
             yy <- yy[, 1]/w
         }
     }
+
     family <- glmFit$family
     nacoef <- as.numeric(which(is.na(glmFit$coef)))
     xx <- as.data.frame(xx)
@@ -238,33 +246,38 @@ geeglm<- function (formula, family = gaussian, data = parent.frame(),
                      scale.fix = scale.fix, scale.value = scale.value, corstr, 
                      ...)
     ans <- c(ans, list(call = call, formula = formula))
-    class(ans) <- "geese"
-    ans$X <- xx
-    ans$id <- id
+    class(ans)  <- "geese"
+    ans$X       <- xx
+    ans$id      <- id
     ans$weights <- w
-    value <- glmFit
-    toDelete <- c("R", "deviance", "aic", "null.deviance", "iter", 
-                  "df.null", "converged", "boundary")
+    
+    value       <- glmFit
+    toDelete    <- c("R", "deviance", "aic", "null.deviance", "iter", 
+                     "df.null", "converged", "boundary")
     value[match(toDelete, names(value))] <- NULL
-    value$method <- "geese.fit"
-    value$geese <- ans
-    value$weights <- ans$weights
+
+    value$method       <- "geese.fit"
+    value$geese        <- ans
+    value$weights      <- ans$weights
     value$coefficients <- ans$beta
-    value$offset <- offset
-    if (is.null(value$offset)) 
+    value$offset       <- offset
+
+    if (is.null(value$offset)){
         value$linear.predictors <- ans$X %*% ans$beta
-    else value$linear.predictors <- value$offset + ans$X %*% 
-             ans$beta
+    } else {
+        value$linear.predictors <- value$offset + ans$X %*% ans$beta
+    }
+    
     value$fitted.values <- family(value)$linkinv(value$linear.predictors)
     value$modelInfo <- ans$model
-    value$id <- ans$id
-    value$call <- ans$call
-    value$corstr <- ans$model$corstr
-    value$cor.link <- ans$model$cor.link
-    value$control <- ans$control
-    value$std.err <- std.err
-    class(value) <- c("geeglm", "gee", "glm", "lm")
-    return(value)
+    value$id        <- ans$id
+    value$call      <- ans$call
+    value$corstr    <- ans$model$corstr
+    value$cor.link  <- ans$model$cor.link
+    value$control   <- ans$control
+    value$std.err   <- std.err
+    class(value)    <- c("geeglm", "gee", "glm", "lm")
+    value
 }
 
 

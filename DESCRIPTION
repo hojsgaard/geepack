@@ -7,7 +7,9 @@ Authors@R: c(
     person(given = "Ulrich", family = "Halekoh",
         email = "uhalekoh@health.sdu.dk", role = c("aut", "cph")),
     person(given = "Jun", family = "Yan",
-        email = "jun.yan@uconn.edu", role = c("aut", "cph"))
+        email = "jun.yan@uconn.edu", role = c("aut", "cph")),
+    person(given = "Claus", family = "Ekstrøm",
+        email = "ekstrom@sund.ku.dk", role = c("ctb"))	
   )     
 Maintainer: Søren Højsgaard <sorenh@math.aau.dk>
 Description: Generalized estimating equations solver for parameters in
@@ -18,7 +20,9 @@ Encoding: UTF-8
 LazyData: true
 License: GPL (>= 3)
 NeedsCompilation: yes
+Depends:
+    R (>= 2.10)
 Imports:
-	MASS
+    MASS
 Repository: CRAN
 RoxygenNote: 7.0.1
