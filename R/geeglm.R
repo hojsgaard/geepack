@@ -2,6 +2,8 @@ eprint <- function(x){
   #print(x)
 }
 
+
+
 #' @title Fit Generalized Estimating Equations (GEE)
 #' 
 #' @description The geeglm function fits generalized estimating equations using
