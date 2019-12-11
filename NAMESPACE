@@ -9,10 +9,12 @@ importFrom("stats", "binomial", "coef", "fitted", "formula",
            "summary.glm", "var", "family")
 importFrom("utils", "head")
 importFrom("MASS", "ginv")
+importFrom("broom", "tidy")
 
 # maintained by Soren
 export(geeglm, fixed2Zcor, anovageePrim2)
 export(QIC)
+export(tidy)
 
 S3method(anova, geeglm)
 S3method(print, geeglm)

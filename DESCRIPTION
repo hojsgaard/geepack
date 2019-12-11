@@ -21,8 +21,9 @@ LazyData: true
 License: GPL (>= 3)
 NeedsCompilation: yes
 Depends:
-    R (>= 2.10)
+    R (>= 3.5.0)
 Imports:
-    MASS
+    MASS,
+    broom
 Repository: CRAN
 RoxygenNote: 7.0.1

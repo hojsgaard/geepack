@@ -165,8 +165,8 @@ geeglm<- function (formula, family = gaussian, data = parent.frame(),
     id <- model.extract(mf, id)
     if (is.null(id)) stop("id variable not found.")
 
-    if (is.unsorted(id))
-        warning("Data is assumed to be sorted by the 'id' variable; that seems not to be the case. \n", call.=FALSE)
+    ## if (is.unsorted(id))
+    ##     warning("Data is assumed to be sorted by the 'id' variable; that seems not to be the case. \n", call.=FALSE)
 
     waves <- model.extract(mf, waves)
     ##print(waves)    
@@ -196,6 +196,12 @@ geeglm<- function (formula, family = gaussian, data = parent.frame(),
     }
     if (stopIt)
         stop("Can not continue...\n")
+
+    ## XY <<- list(Y=Y, X=X)
+    ## print(length(Y))
+    ## print(dim(X))
+    ## print(length(waves))
+    
     
     N <- NROW(Y)
     yy <- Y
@@ -380,31 +386,32 @@ print.summary.geeglm <- function (x,
 
 #print.summary.geeglm <- function (x, digits = NULL, quote = FALSE, prefix = "", ...) 
 {
-  if (is.null(digits)) 
-    digits <- options()$digits
-  else options(digits = digits)
-  cat("\nCall:\n");   print(x$call)
-  cat("\n Coefficients:\n");
-  ##print(as.matrix(x$coef), digits = digits)
-  printCoefmat(as.matrix(x$coef), digits = digits) ## Thanks, Achim
-  
-  if (x$scale.fix == FALSE) {
-    cat("\nEstimated Scale Parameters:\n")
-    print(x$dispersion[1:2], digits = digits)
-  }
-  else cat("\nScale is fixed.\n")
-  cat("\nCorrelation: Structure =", x$corstr)
-  if (pmatch(x$corstr, "independence", 0) == 0) {
-    cat("  Link =", x$cor.link, "\n")
-    cat("\nEstimated Correlation Parameters:\n")
-    print(x$corr, digits = digits)
-  }
-  
-  cat("Number of clusters:  ", length(x$clusz), "  Maximum cluster size:", 
-      max(x$clusz), "\n")
-  #cat("\nReturned Error Value:    ")
-  #cat(x$error, "\n")
-  invisible(x)
+    if (is.null(digits)) 
+        digits <- options()$digits
+    else options(digits = digits)
+    cat("\nCall:\n");   print(x$call)
+    cat("\n Coefficients:\n");
+    ##print(as.matrix(x$coef), digits = digits)
+    printCoefmat(as.matrix(x$coef), digits = digits) ## Thanks, Achim
+    
+    cat("\nCorrelation structure =", x$corstr, "\n")
+    if (!(x$scale.fix)) {
+        cat("Estimated Scale Parameters:\n\n")
+        print(x$dispersion[1:2], digits = digits)
+    }
+    else cat("Scale is fixed.\n\n")
+    
+    if (pmatch(x$corstr, "independence", 0) == 0) {
+        cat("  Link =", x$cor.link, "\n")
+        cat("\nEstimated Correlation Parameters:\n")
+        print(x$corr, digits = digits)
+    }
+    
+    cat("Number of clusters:  ", length(x$clusz),
+        " Maximum cluster size:", max(x$clusz), "\n")
+                                        #cat("\nReturned Error Value:    ")
+                                        #cat(x$error, "\n")
+    invisible(x)
 }
 
 
@@ -412,27 +419,27 @@ print.geeglm <- function (x, digits = NULL, quote = FALSE, prefix = "", ...)
 {
   xg <- x$geese
   if (is.null(digits)) 
-    digits <- options()$digits
-  else options(digits = digits)
+      digits <- options()$digits
+    else options(digits = digits)
   cat("\nCall:\n");   print(x$call)
   cat("\nCoefficients:\n")
   print(unclass(x$coefficients), digits = digits)
   
   cat("\nDegrees of Freedom:", length(x$y), "Total (i.e. Null); ", 
       x$df.residual, "Residual\n")
-
+  
   if (!xg$model$scale.fix) {
-    cat("\nScale Link:                  ", xg$model$sca.link)
-    cat("\nEstimated Scale Parameters:  ")
-    print(as.numeric(unclass(xg$gamma)), digits = digits)
+      cat("\nScale Link:                  ", xg$model$sca.link)
+      cat("\nEstimated Scale Parameters:  ")
+      print(as.numeric(unclass(xg$gamma)), digits = digits)
   }
   else cat("\nScale is fixed.\n")
   
   cat("\nCorrelation:  Structure =",xg$model$corstr, " ")
   if (pmatch(xg$model$corstr, "independence", 0) == 0) {
-    cat("  Link =", xg$model$cor.link, "\n")
-    cat("Estimated Correlation Parameters:\n")
-    print(unclass(xg$alpha), digits = digits)
+      cat("  Link =", xg$model$cor.link, "\n")
+      cat("Estimated Correlation Parameters:\n")
+      print(unclass(xg$alpha), digits = digits)
   }
   cat("\nNumber of clusters:  ", length(xg$clusz), "  Maximum cluster size:", 
       max(xg$clusz), "\n\n")
@@ -468,9 +475,9 @@ residuals.geeglm <- function (object, type = c("pearson", "working", "response")
 
 plot.geeglm <- function(x,...){
   xx <- fitted(x)
-  rp <- residuals(x,"pearson")
-  plot(xx,rp,ylab="Pearson residuals",xlab="Fitted values")
-  abline(h=0)
+  rp <- residuals(x, "pearson")
+  plot(xx, rp, ylab="Pearson residuals", xlab="Fitted values")
+  abline(h = 0)
   m <- lowess(rp ~ xx)
   lines(m)
   

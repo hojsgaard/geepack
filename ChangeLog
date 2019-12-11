@@ -6,7 +6,11 @@
 
 	* Check for data being sorted by 'id' i geeglm; a warning is issued if not.
 
-	* QIC added; thanks to Claus Ekstrøm who is now contributor.
+	* QIC added; thanks to Claus Ekstrøm who is now a contributor.
+
+	* tidy function from broom package is imported.
+
+	* muscatine data added
 	
 	* Version 1.3-0 uploaded
 
