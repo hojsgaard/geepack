@@ -21,9 +21,8 @@ LazyData: true
 License: GPL (>= 3)
 NeedsCompilation: yes
 Depends:
-    R (>= 3.5.0)
+    R (>= 3.5.0),
+    methods
 Imports:
-    MASS,
-    broom
-Repository: CRAN
+    MASS, broom, magrittr
 RoxygenNote: 7.0.1

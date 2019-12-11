@@ -101,19 +101,19 @@
 #' @examples
 #'
 #'                                                                         
-#' muscatine$cage <- musc$age - 12                                         
-#' muscatine$cage2 <- musc$cage^2                                          
+#' muscatine$cage <- muscatine$age - 12                                         
+#' muscatine$cage2 <- muscatine$cage^2                                          
 #'                                                                         
 #' f1 <- numobese ~ gender                                                 
 #' f2 <- numobese ~ gender + cage + cage2 +                                
 #'     gender:cage + gender:cage2                                          
 #'                                                                         
 #' gee1 <- geeglm(formula = f1, id = id,                                   
-#'                waves = occasion, data = musc, family = binomial(),      
+#'                waves = occasion, data = muscatine, family = binomial(),      
 #'                corstr = "independence")                                 
 #'                                                                         
 #' gee2 <- geeglm(formula = f2, id = id,                                   
-#'                waves = occasion, data = musc, family = binomial(),      
+#'                waves = occasion, data = muscatine, family = binomial(),      
 #'                corstr = "independence")                                 
 #'                                                                         
 #' tidy(gee1)                                                              
@@ -129,7 +129,6 @@
 #' The \code{ohio} data frame has 2148 rows and 4 columns. The dataset is a
 #' subset of the six-city study, a longitudinal study of the health effects of
 #' air pollution.
-#' 
 #' 
 #' @format This data frame contains the following columns:
 #'

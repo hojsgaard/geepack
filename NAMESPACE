@@ -1,5 +1,8 @@
 useDynLib(geepack)
 
+import(methods)
+importFrom("MASS", ginv)
+
 importFrom("graphics", "abline", "lines", "plot")
 importFrom("stats", "binomial", "coef", "fitted", "formula",
            "gaussian", "glm.fit", "is.empty.model", "lm.fit", "lowess",
@@ -7,14 +10,17 @@ importFrom("stats", "binomial", "coef", "fitted", "formula",
            "model.response", "model.weights", "na.omit", "naresid",
            "pchisq", "printCoefmat", "quasi", "residuals",
            "summary.glm", "var", "family")
+
 importFrom("utils", "head")
-importFrom("MASS", "ginv")
-importFrom("broom", "tidy")
+importFrom("broom", tidy)
 
 # maintained by Soren
 export(geeglm, fixed2Zcor, anovageePrim2)
 export(QIC)
 export(tidy)
+
+importFrom(magrittr, "%>%")
+export("%>%")
 
 S3method(anova, geeglm)
 S3method(print, geeglm)
