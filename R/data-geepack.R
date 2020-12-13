@@ -31,12 +31,14 @@
 #' 
 #' data(dietox)
 #' head(dietox)
+#' \dontrun{
 #' if (require(ggplot2)){
-#'   qplot(Time, Weight, data=dietox, col=Pig) + geom_line() + theme(legend.position = "none") + facet_grid(Evit~Cu)
+#'   qplot(Time, Weight, data=dietox, col=Pig) + geom_line() +
+#'         theme(legend.position = "none") + facet_grid(Evit~Cu)
 #' } else {
 #'   coplot(Weight ~ Time | Evit * Cu, data=dietox)
 #' }
-#' 
+#' }
 "dietox"
 
 
