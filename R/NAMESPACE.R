@@ -14,6 +14,7 @@
 #'
 #' @importFrom utils head str
 #' @importFrom broom tidy
+#' @export tidy
 #' @importFrom magrittr %>%
 #' @export  %>%
 

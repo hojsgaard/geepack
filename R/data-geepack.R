@@ -106,8 +106,6 @@
 #' Series A, 147, 87-99.
 #'
 #' @examples
-#'
-#'                                                                         
 #' muscatine$cage <- muscatine$age - 12                                         
 #' muscatine$cage2 <- muscatine$cage^2                                          
 #'                                                                         

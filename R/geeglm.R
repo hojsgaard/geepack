@@ -250,6 +250,9 @@ geeglm<- function (formula, family = gaussian, data = parent.frame(),
     
     if (is.null(start)) 
         start <- glmFit$coef
+
+    ## cat("KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK\n")
+    ## print(id)
     
     ans <- geese.fit(xx, yy, id, offset, soffset, w, waves = waves, 
                      zsca, zcor = zcor, corp = NULL, control = control, b = start, 

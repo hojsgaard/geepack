@@ -47,8 +47,6 @@ to age-gender specific norms, children were classified as obese or
 not obese.
 }
 \examples{
-
-                                                                        
 muscatine$cage <- muscatine$age - 12                                         
 muscatine$cage2 <- muscatine$cage^2                                          
                                                                         

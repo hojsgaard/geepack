@@ -140,15 +140,6 @@ structure.  The following are permitted: \code{"independence"},
 \code{"userdefined"}, and \code{"fixed"}}
 
 \item{\dots}{further arguments passed to or from other methods.}
-
-\item{x, y}{\code{x} is a design matrix of dimension \code{n * p},
-and \code{y} is a vector of observations of length \code{n}.}
-
-\item{offset, soffset}{vector of offset for the mean and for the
-scale, respectively.}
-
-\item{zsca}{a design matrix of dimension \code{n * r} for the
-scales.}
 }
 \value{
 An object of class \code{"geese"} representing the fit.

@@ -10,6 +10,7 @@
 #' 
 #' @aliases geese geese.fit print.geese summary.geese
 #'     print.summary.geese
+#' 
 #' @param formula a formula expression as for \code{glm}, of the form
 #'     \code{response ~ predictors}. See the documentation of lm and
 #'     formula for details. As for glm, this specifies the linear
@@ -88,12 +89,12 @@
 #'     structure.  The following are permitted: \code{"independence"},
 #'     \code{"exchangeable"}, \code{"ar1"}, \code{"unstructured"},
 #'     \code{"userdefined"}, and \code{"fixed"}
-#' @param x,y \code{x} is a design matrix of dimension \code{n * p},
-#'     and \code{y} is a vector of observations of length \code{n}.
-#' @param offset,soffset vector of offset for the mean and for the
-#'     scale, respectively.
-#' @param zsca a design matrix of dimension \code{n * r} for the
-#'     scales.
+## ' @param x,y \code{x} is a design matrix of dimension \code{n * p},
+## '     and \code{y} is a vector of observations of length \code{n}.
+## ' @param offset,soffset vector of offset for the mean and for the
+## '     scale, respectively.
+## ' @param zsca a design matrix of dimension \code{n * r} for the
+## '     scales.
 #' @param \dots further arguments passed to or from other methods.
 #' @return An object of class \code{"geese"} representing the fit.
 #' @author Jun Yan \email{jyan.stat@@gmail.com}
