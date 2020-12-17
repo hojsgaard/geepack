@@ -1,7 +1,8 @@
-geepack v1.3.2 (Release date: 2020-12-14)
+geepack v1.3.2 (Release date: 2020-12-18)
 =========================================
 
 * NAMESPACE and all .Rd files are now auto generated.
+* PROTECT / UNPROTECT issue fixed (in file inter.cc)
 * Improved documentation of dietox.
 
 
