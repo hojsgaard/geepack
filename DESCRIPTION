@@ -15,7 +15,8 @@ Maintainer: Søren Højsgaard <sorenh@math.aau.dk>
 Description: Generalized estimating equations solver for parameters in
     mean, scale, and correlation structures, through mean link,
     scale link, and correlation link. Can also handle clustered
-    categorical responses.
+    categorical responses. See e.g. Halekoh and Højsgaard, (2005,
+    <doi:10.18637/jss.v015.i02>), for details. 
 Encoding: UTF-8
 LazyData: true
 License: GPL (>= 3)
