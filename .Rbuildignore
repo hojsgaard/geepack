@@ -2,3 +2,4 @@ LICENSE
 .travis.yml
 devel/*
 NAMESPACE_old
+^CRAN-SUBMISSION$
