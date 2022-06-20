@@ -1,3 +1,7 @@
+* Upcoming version
+
+        * Fixed bug in the code for QIC. Thnaks to Brian McLoone for finding and reporting this.
+
 * geepack v1.3.3 (2022-01-04) 
 
 	* Minor documentation updates
