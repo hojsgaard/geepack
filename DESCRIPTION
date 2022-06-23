@@ -1,5 +1,5 @@
 Package: geepack
-Version: 1.3.5
+Version: 1.3.6
 Title: Generalized Estimating Equation Package
 Authors@R: c(
     person(given = "Søren", family = "Højsgaard",

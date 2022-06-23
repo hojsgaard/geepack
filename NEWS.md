@@ -1,3 +1,7 @@
+* geepack v1.3.5 (2022-06-27)
+
+*   Fixed a critical error in QIC() (thanks to Brian McLoone for finding this)
+
 * geepack v1.3.5 (2022-05-30)
 
 	* Submission again.
