@@ -1,3 +1,11 @@
+* geepack v1.3.5 (2022-05-30)
+
+	* Submission again.
+
+* geepack v1.3.4 (2022-05-03)
+
+    * Minor documentation update by request from CRAN
+
 * geepack v1.3.3 (2022-01-04) 
 
 	* Minor documentation updates
