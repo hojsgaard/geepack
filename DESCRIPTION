@@ -8,7 +8,7 @@ Authors@R: c(
         email = "uhalekoh@health.sdu.dk", role = c("aut", "cph")),
     person(given = "Jun", family = "Yan",
         email = "jun.yan@uconn.edu", role = c("aut", "cph")),
-    person(given = "Claus", family = "Ekstrøm",
+    person(given = "Claus Thorn", family = "Ekstrøm",
         email = "ekstrom@sund.ku.dk", role = c("ctb"))	
   )     
 Maintainer: Søren Højsgaard <sorenh@math.aau.dk>
