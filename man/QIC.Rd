@@ -76,6 +76,6 @@ Overdispersion\}.  Biometrics, 46, 657-671.
 \code{geeglm}
 }
 \author{
-Claus Ekstrom \email{claus@rprimer.dk}
+Claus Ekstrom \email{claus@rprimer.dk}, Brian McLoone \email{bmcloone@pdx.edu} and Steven Orzack \email{orzack@freshpond.org}
 }
 \keyword{htest}
