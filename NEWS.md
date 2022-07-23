@@ -1,3 +1,7 @@
+* geepack v1.3.6 (2022-07-23)
+
+	* Version 1.3.5 never made it to CRAN for some reason.
+
 * geepack v1.3.5 (2022-07-18)
 
 	* Fixed a critical error in QIC() (thanks to Brian McLoone and Steven Orzack for finding this)
