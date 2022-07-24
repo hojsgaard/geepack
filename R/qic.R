@@ -37,6 +37,7 @@
 #'     Hin, L.-Y. and Wang, Y-G.
 #'     (2009). \emph{Working-correlation-structure identification in
 #'     generalized estimating equations}, Statistics in Medicine 28:
+#'     generalized estimating equations}, Statistics in Medicine 28:
 #'     642-658. \cr Thall, P.F.  and Vail, S.C. (1990). \emph{Some
 #'     Covariance Models for Longitudinal Count Data with
 #'     Overdispersion}.  Biometrics, 46, 657-671.
@@ -47,11 +48,13 @@
 #' data(ohio)
 #' fit <- geeglm(resp ~ age + smoke + age:smoke, id=id, data=ohio,
 #'              family=binomial, corstr="exch", scale.fix=TRUE)
-#' QIC(fit)
+#' fit2 <- geeglm(resp ~ age + smoke + age:smoke, id=id, data=ohio,
+#'              family=binomial, corstr="ar1", scale.fix=TRUE)            
+#' QIC(fit, fit2)
 #'
 #' @rdname QIC
 #' @export
-QIC.geeglm <- function(object, tol=.Machine$double.eps, ...) {
+QIC.geeglm <- function(object, ..., tol=.Machine$double.eps) {
 
   #
   # The majority of this code was taken from the internet
@@ -137,7 +140,7 @@ QIC.geeglm <- function(object, tol=.Machine$double.eps, ...) {
 
 #' @rdname QIC
 #' @export
-QIC.ordgee <- function(object, tol = .Machine$double.eps, ...) {
+QIC.ordgee <- function(object, ..., tol = .Machine$double.eps) {
 
   #
   # The majority of this code was taken from the internet
@@ -324,7 +327,7 @@ QIC.ordgee <- function(object, tol = .Machine$double.eps, ...) {
 
 #' @rdname QIC
 #' @export
-QIC.geekin <- function(object,  tol = .Machine$double.eps, ...) {
+QIC.geekin <- function(object, ..., tol = .Machine$double.eps) {
 
   # This functions is only needed to replace class
   # geeglm to make sure the regular
@@ -346,6 +349,6 @@ QIC.geekin <- function(object,  tol = .Machine$double.eps, ...) {
 
 #' @rdname QIC
 #' @export
-QIC <- function(object,  tol = .Machine$double.eps, ...) {
+QIC <- function(object, ..., tol = .Machine$double.eps) {
   UseMethod("QIC")
 }
