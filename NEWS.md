@@ -1,34 +1,37 @@
-* geepack v1.3.6 (2022-07-23)
+# geepack v1.3.7 (2022-08-04)
 
-	* Version 1.3.5 never made it to CRAN for some reason.
+	* Version 1.3.6 never made it to CRAN for some reason (no changes of NEWS.md detected). Now NEWS.md has different markup.
+	
+# geepack v1.3.6 (2022-07-23)
 
-* geepack v1.3.5 (2022-07-18)
+	* Version 1.3.5 never made it to CRAN for some reason (no changes of NEWS.md detected)
+
+# geepack v1.3.5 (2022-07-18)
 
 	* Fixed a critical error in QIC() (thanks to Brian McLoone and Steven Orzack for finding this)
 
-* geepack v1.3.4 (2022-05-03)
+# geepack v1.3.4 (2022-05-03)
 
     * Minor documentation update by request from CRAN
 
-* geepack v1.3.3 (2022-01-04) 
+# geepack v1.3.3 (2022-01-04) 
 
 	* Minor documentation updates
 	* Minor polishing of code
 
-
-* geepack v1.3.2 (Release date: 2020-12-18)
+# geepack v1.3.2 (Release date: 2020-12-18)
 
 	* NAMESPACE and all .Rd files are now auto generated.
 	* PROTECT / UNPROTECT issue fixed (in file inter.cc)
 	* Improved documentation of dietox.
 
 
-* geepack v1.3.1 (Release date: 2019-12-13)
+# geepack v1.3.1 (Release date: 2019-12-13)
 
 	* PROTECT / UNPROTECT imbalance fixed
 	* Version 1.3-1 uploaded
 
-* geepack v1.3.0 (Release date: 2019-12-10)
+# geepack v1.3.0 (Release date: 2019-12-10)
 
 	* Migrated to use roxygen
    * Improved documentation of geeglm
@@ -38,18 +41,18 @@
    * muscatine data added
    * Version 1.3-0 uploaded
 
-* geepack v1.2.1 (Release date: 2014-09-13)
+# geepack v1.2.1 (Release date: 2014-09-13)
 
 	* geeglm objects now inherits from lm also (to prevent warning when
 		calling predict).
 
-* geepack v1.2.0 (Release date: 2014-09-13)
+# geepack v1.2.0 (Release date: 2014-09-13)
 
   * Maintainer of geepack is now Søren Højsgaard
   * Location of vignette fixed
   * Version 1.2-0 uploaded
 
-* Legacy from when Jun Yan was maintainer:
+# Legacy from when Jun Yan was maintainer:
 
 2012-01-27  Jun Yan  <jun.yan@uconn.edu>
 
