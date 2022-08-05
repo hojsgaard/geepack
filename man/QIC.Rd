@@ -7,21 +7,21 @@
 \alias{QIC.ordgee}
 \title{Quasi Information Criterion}
 \usage{
-\method{QIC}{geeglm}(object, tol = .Machine$double.eps, ...)
+\method{QIC}{geeglm}(object, ..., tol = .Machine$double.eps)
 
-\method{QIC}{ordgee}(object, tol = .Machine$double.eps, ...)
+\method{QIC}{ordgee}(object, ..., tol = .Machine$double.eps)
 
-\method{QIC}{geekin}(object, tol = .Machine$double.eps, ...)
+\method{QIC}{geekin}(object, ..., tol = .Machine$double.eps)
 
-QIC(object, tol = .Machine$double.eps, ...)
+QIC(object, ..., tol = .Machine$double.eps)
 }
 \arguments{
 \item{object}{a fitted GEE model from the geepack
-package. Currently only works on geeglm objects}
+package. Currently only works on geeglm objects.}
 
-\item{tol}{the tolerance used for matrix inversion}
+\item{\dots}{optionally more fitted geeglm model objects.}
 
-\item{\dots}{optionally more fitted geeglm model objects}
+\item{tol}{the tolerance used for matrix inversion.}
 }
 \value{
 A vector or matrix with the QIC, QICu, quasi likelihood,
@@ -54,7 +54,9 @@ library(geepack)
 data(ohio)
 fit <- geeglm(resp ~ age + smoke + age:smoke, id=id, data=ohio,
              family=binomial, corstr="exch", scale.fix=TRUE)
-QIC(fit)
+fit2 <- geeglm(resp ~ age + smoke + age:smoke, id=id, data=ohio,
+             family=binomial, corstr="ar1", scale.fix=TRUE)            
+QIC(fit, fit2)
 
 }
 \references{
@@ -66,6 +68,7 @@ York. \cr
 
 \if{html}{\out{<div class="sourceCode">}}\preformatted{Hin, L.-Y. and Wang, Y-G.
 (2009). \\emph\{Working-correlation-structure identification in
+generalized estimating equations\}, Statistics in Medicine 28:
 generalized estimating equations\}, Statistics in Medicine 28:
 642-658. \\cr Thall, P.F.  and Vail, S.C. (1990). \\emph\{Some
 Covariance Models for Longitudinal Count Data with
