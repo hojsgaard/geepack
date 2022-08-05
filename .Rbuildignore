@@ -4,3 +4,5 @@ devel/*
 NAMESPACE_old
 ^CRAN-SUBMISSION$
 ^cran-comments\.md$
+^.*\.Rproj$
+^\.Rproj\.user$
