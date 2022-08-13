@@ -2,6 +2,7 @@ LICENSE
 .travis.yml
 devel/*
 NAMESPACE_old
+LEGACY.md
 ^CRAN-SUBMISSION$
 ^cran-comments\.md$
 ^.*\.Rproj$
