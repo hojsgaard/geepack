@@ -7,13 +7,13 @@
 \alias{QIC.ordgee}
 \title{Quasi Information Criterion}
 \usage{
-\method{QIC}{geeglm}(object, ..., tol = .Machine$double.eps)
+\method{QIC}{geeglm}(object, ..., tol = .Machine$double.eps, env = parent.frame())
 
-\method{QIC}{ordgee}(object, ..., tol = .Machine$double.eps)
+\method{QIC}{ordgee}(object, ..., tol = .Machine$double.eps, env = parent.frame())
 
-\method{QIC}{geekin}(object, ..., tol = .Machine$double.eps)
+\method{QIC}{geekin}(object, ..., tol = .Machine$double.eps, env = parent.frame())
 
-QIC(object, ..., tol = .Machine$double.eps)
+QIC(object, ..., tol = .Machine$double.eps, env = parent.frame())
 }
 \arguments{
 \item{object}{a fitted GEE model from the geepack
@@ -22,6 +22,8 @@ package. Currently only works on geeglm objects.}
 \item{\dots}{optionally more fitted geeglm model objects.}
 
 \item{tol}{the tolerance used for matrix inversion.}
+
+\item{env}{environment.}
 }
 \value{
 A vector or matrix with the QIC, QICu, quasi likelihood,
