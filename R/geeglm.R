@@ -164,7 +164,8 @@ geeglm<- function (formula, family = gaussian, data = parent.frame(),
   mf[[1]] <- as.name("model.frame")
   
   mftmp <- mf
-  to_delete <- c("family", "corstr", "control", "zcor", "std.err", "scale.fix")
+  to_delete <- c("family", "corstr", "control", "zcor", "std.err", "scale.fix",
+                 "start", "etastart", "mustart")
   mftmp[match(to_delete, names(mftmp))] <- NULL
   
   ## mftmp$family <- mftmp$corstr <- mftmp$control <- mftmp$zcor <- mftmp$std.err <- NULL    
@@ -249,9 +250,14 @@ geeglm<- function (formula, family = gaussian, data = parent.frame(),
   xx <- as.data.frame(xx)
   xx[, nacoef] <- NULL
   xx <- as.matrix(xx)
+
+  ## @jeffeaton 2022-09-27: I am not sure if this if(is.null(start)) is desireable.
+  ##    The specified starting values will be used in the initial glm() fit to create
+  ##    glmFit. But here it seems better to use the glmFit coefficients.
+  ##  
+  ## if (is.null(start))
   
-  if (is.null(start)) 
-    start <- glmFit$coef
+  start <- glmFit$coef
    
   ans <- geese.fit(xx, yy, id, offset, soffset, w, waves = waves, 
     zsca, zcor = zcor, corp = NULL, control = control, b = start, 
