@@ -1,5 +1,5 @@
 Package: geepack
-Version: 1.3.10
+Version: 1.3.12
 Title: Generalized Estimating Equation Package
 Authors@R: c(
     person(given = "Søren", family = "Højsgaard",
@@ -26,5 +26,5 @@ Depends:
     methods
 Imports:
     MASS, broom, magrittr
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.2
 Roxygen: list(markdown = TRUE)

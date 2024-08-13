@@ -1,3 +1,11 @@
+# geepack v1.3.12 (2024-08-13)
+
+	* fixed referece to std in c code
+
+# geepack v1.3.11 (2024-06-06)
+
+	* Update of documentation of geeglm
+
 # geepack v1.3.10 (2022-09-29)
 	
 	* Update of vignette.

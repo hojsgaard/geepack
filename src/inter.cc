@@ -1,11 +1,11 @@
+#include <R.h>
+#include <Rmath.h>
+#include <Rdefines.h>
+
 using namespace std;
 
 #include "tntsupp.h"
 #include "geese.h"
-
-#include <R.h>
-#include <Rmath.h>
-#include <Rdefines.h>
 
 #include "famstr.h"
 #include "param.h"
@@ -15,6 +15,7 @@ using namespace std;
 DMatrix asDMatrix(SEXP a) {
   double *x;
   x = NUMERIC_POINTER(AS_NUMERIC(a));
+  
   int *dims = INTEGER_POINTER(AS_INTEGER(GET_DIM(a)));
   DMatrix ans(dims[0], dims[1], x);
   return ans;

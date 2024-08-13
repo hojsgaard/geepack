@@ -1,9 +1,11 @@
 #ifndef TNTSUPP_H
 #define TNTSUPP_H
 
+#include <iostream>
+
 using namespace std;
 
-#include <iostream>
+
 #include "tnt/subscript.h"
 #include "tnt/tnt.h"
 #include "tnt/vec.h"
