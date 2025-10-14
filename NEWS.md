@@ -1,6 +1,7 @@
-# geepack v1.3.12 (2024-08-13)
+# geepack v1.3.12 (2024-09-23)
 
-	* fixed referece to std in c code
+	* Fixed referece to std in c code. 
+	* Other issues in old code fixed. Thanks to Brian Ripley
 
 # geepack v1.3.11 (2024-06-06)
 

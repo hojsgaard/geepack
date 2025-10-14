@@ -1,5 +1,1 @@
-## R CMD check results
-
-0 errors | 0 warnings | 1 note
-
-* This is a new release.
+This is the version submitted by cran maintainers on september 9th. I have just added the right version number and put changed source files into github repo.
